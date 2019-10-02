@@ -13,6 +13,7 @@
 		C71736CA2338A2A80067A5DD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C71736C82338A2A80067A5DD /* Main.storyboard */; };
 		C71736CC2338A2AA0067A5DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C71736CB2338A2AA0067A5DD /* Assets.xcassets */; };
 		C71736CF2338A2AA0067A5DD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C71736CD2338A2AA0067A5DD /* LaunchScreen.storyboard */; };
+		C71736D72338A6740067A5DD /* ExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71736D62338A6740067A5DD /* ExploreViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		C71736CB2338A2AA0067A5DD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C71736CE2338A2AA0067A5DD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C71736D02338A2AA0067A5DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C71736D62338A6740067A5DD /* ExploreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 				C71736C22338A2A80067A5DD /* AppDelegate.swift */,
 				C71736C42338A2A80067A5DD /* SceneDelegate.swift */,
 				C71736C62338A2A80067A5DD /* ViewController.swift */,
+				C71736D62338A6740067A5DD /* ExploreViewController.swift */,
 				C71736C82338A2A80067A5DD /* Main.storyboard */,
 				C71736CB2338A2AA0067A5DD /* Assets.xcassets */,
 				C71736CD2338A2AA0067A5DD /* LaunchScreen.storyboard */,
@@ -138,6 +141,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C71736D72338A6740067A5DD /* ExploreViewController.swift in Sources */,
 				C71736C72338A2A80067A5DD /* ViewController.swift in Sources */,
 				C71736C32338A2A80067A5DD /* AppDelegate.swift in Sources */,
 				C71736C52338A2A80067A5DD /* SceneDelegate.swift in Sources */,
