@@ -27,17 +27,15 @@ class ViewController: UIViewController, MKMapViewDelegate {
         super.viewDidLoad()
         title = "Choose an Address"
         
-        performSelector(inBackground: #selector(checkLocationServices), with: nil)
+        checkLocationServices()
     }
     
-    @objc func checkLocationServices(){
+    func checkLocationServices(){
         if CLLocationManager.locationServicesEnabled(){
             setupLocationManager()
             checkLocationAuthorization()
         }else{
-            let alert = UIAlertController(title: "To be able to use the app please enable your location services.", message: nil, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            present(alert, animated: true, completion: nil)
+            Alert.showBasicAlert(on: self)
         }
     }
     
@@ -51,30 +49,25 @@ class ViewController: UIViewController, MKMapViewDelegate {
         case .authorizedWhenInUse:
             startTrackingUserLocation()
         case .denied:
-            let alert = UIAlertController(title: "To be able to use the app please enable your location services.", message: nil, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            present(alert, animated: true, completion: nil)
+            Alert.showBasicAlert(on: self)
             break
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
             break
         case .restricted:
-            let alert = UIAlertController(title: "To be able to use the app please enable your location services.", message: nil, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            present(alert, animated: true, completion: nil)
+            Alert.showBasicAlert(on: self)
             break
         case .authorizedAlways:
             break
         @unknown default:
             fatalError()
         }
-        
     }
     
     func startTrackingUserLocation(){
         mapView.showsUserLocation = true
         centerViewOnUserLocation()
-        locationManager.startUpdatingLocation()
+        // locationManager.startUpdatingLocation()
         previousLocation = getCenterLocation(for: mapView)
         if let previousLocation = previousLocation{
             reverseGeoCode(from: previousLocation)
@@ -95,13 +88,11 @@ class ViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    
     @IBAction func confirmAddress(_ sender: UIButton) {
         guard let exploreVC = storyboard?.instantiateViewController(identifier: "Explore") as? ExploreViewController else {return}
         exploreVC.usersLocation = previousLocation
         navigationController?.pushViewController(exploreVC, animated: true)
     }
-    
     
     @IBAction func addPin(_ sender: UILongPressGestureRecognizer) {
         
@@ -131,17 +122,12 @@ class ViewController: UIViewController, MKMapViewDelegate {
             guard let self = self else {return}
             
             if let _ = error{
-                let alert = UIAlertController(title: "Something went wrong.", message: "Please make sure your location is enabled.", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
+                Alert.showBasicAlert(on: self)
                 return
             }
             
             guard let placemark = placemarks?.first else{
-                let alert = UIAlertController(title: "Something went wrong.", message: "Please make sure your location is enabled.", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-                
+                Alert.showBasicAlert(on: self)
                 return
             }
             
@@ -158,15 +144,19 @@ class ViewController: UIViewController, MKMapViewDelegate {
 
 extension ViewController: CLLocationManagerDelegate{
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else {return}
-        let region = MKCoordinateRegion.init(center: location.coordinate, latitudinalMeters: regionInMeters, longitudinalMeters: regionInMeters)
-        mapView.setRegion(region, animated: true)
-    }
+    //    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    //        guard let location = locations.last else {return}
+    //        let region = MKCoordinateRegion.init(center: location.coordinate, latitudinalMeters: regionInMeters, longitudinalMeters: regionInMeters)
+    //        mapView.setRegion(region, animated: true)
+    //        centerViewOnUserLocation()
+    //
+    //        reverseGeoCode(from: location)
+    //    }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         checkLocationAuthorization()
         
     }
 }
+
 
