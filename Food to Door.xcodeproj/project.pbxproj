@@ -15,6 +15,16 @@
 		C71736CC2338A2AA0067A5DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C71736CB2338A2AA0067A5DD /* Assets.xcassets */; };
 		C71736CF2338A2AA0067A5DD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C71736CD2338A2AA0067A5DD /* LaunchScreen.storyboard */; };
 		C71736D72338A6740067A5DD /* ExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71736D62338A6740067A5DD /* ExploreViewController.swift */; };
+		C77913692356FAB800119601 /* StoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77913682356FAB800119601 /* StoreData.swift */; };
+		C779136C2357212B00119601 /* StoreModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C779136B2357212B00119601 /* StoreModel.swift */; };
+		C779136E235721A700119601 /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C779136D235721A700119601 /* StoreManager.swift */; };
+		C7914742235452F100524151 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7914741235452F100524151 /* FavoritesViewController.swift */; };
+		C79147472354CAF800524151 /* StoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79147452354CAF800524151 /* StoreCell.swift */; };
+		C79147482354CAF800524151 /* StoreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C79147462354CAF800524151 /* StoreCell.xib */; };
+		C7A3CC62235AE05A009E359D /* StoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A3CC61235AE05A009E359D /* StoreViewController.swift */; };
+		C7A3CC64235B6888009E359D /* MenuData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A3CC63235B6888009E359D /* MenuData.swift */; };
+		C7A3CC66235B73C0009E359D /* MenuManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A3CC65235B73C0009E359D /* MenuManager.swift */; };
+		C7A3CC68235B74EB009E359D /* MenuModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A3CC67235B74EB009E359D /* MenuModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +38,16 @@
 		C71736CE2338A2AA0067A5DD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C71736D02338A2AA0067A5DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C71736D62338A6740067A5DD /* ExploreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreViewController.swift; sourceTree = "<group>"; };
+		C77913682356FAB800119601 /* StoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreData.swift; sourceTree = "<group>"; };
+		C779136B2357212B00119601 /* StoreModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreModel.swift; sourceTree = "<group>"; };
+		C779136D235721A700119601 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
+		C7914741235452F100524151 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
+		C79147452354CAF800524151 /* StoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreCell.swift; sourceTree = "<group>"; };
+		C79147462354CAF800524151 /* StoreCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StoreCell.xib; sourceTree = "<group>"; };
+		C7A3CC61235AE05A009E359D /* StoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreViewController.swift; sourceTree = "<group>"; };
+		C7A3CC63235B6888009E359D /* MenuData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuData.swift; sourceTree = "<group>"; };
+		C7A3CC65235B73C0009E359D /* MenuManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuManager.swift; sourceTree = "<group>"; };
+		C7A3CC67235B74EB009E359D /* MenuModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,15 +82,57 @@
 			children = (
 				C71736C22338A2A80067A5DD /* AppDelegate.swift */,
 				C71736C42338A2A80067A5DD /* SceneDelegate.swift */,
-				C71736C62338A2A80067A5DD /* ViewController.swift */,
-				C71736D62338A6740067A5DD /* ExploreViewController.swift */,
+				C779136A2356FABD00119601 /* Model */,
+				C79147402354476100524151 /* View */,
+				C791473F2354475100524151 /* Controller */,
 				C7008100234723E300687A01 /* Alert.swift */,
-				C71736C82338A2A80067A5DD /* Main.storyboard */,
 				C71736CB2338A2AA0067A5DD /* Assets.xcassets */,
 				C71736CD2338A2AA0067A5DD /* LaunchScreen.storyboard */,
 				C71736D02338A2AA0067A5DD /* Info.plist */,
 			);
 			path = "Food to Door";
+			sourceTree = "<group>";
+		};
+		C779136A2356FABD00119601 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C77913682356FAB800119601 /* StoreData.swift */,
+				C779136B2357212B00119601 /* StoreModel.swift */,
+				C779136D235721A700119601 /* StoreManager.swift */,
+				C7A3CC63235B6888009E359D /* MenuData.swift */,
+				C7A3CC67235B74EB009E359D /* MenuModel.swift */,
+				C7A3CC65235B73C0009E359D /* MenuManager.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		C791473F2354475100524151 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				C71736C62338A2A80067A5DD /* ViewController.swift */,
+				C71736D62338A6740067A5DD /* ExploreViewController.swift */,
+				C7914741235452F100524151 /* FavoritesViewController.swift */,
+				C7A3CC61235AE05A009E359D /* StoreViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		C79147402354476100524151 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C71736C82338A2A80067A5DD /* Main.storyboard */,
+				C79147492354CAFE00524151 /* Store Cell */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		C79147492354CAFE00524151 /* Store Cell */ = {
+			isa = PBXGroup;
+			children = (
+				C79147452354CAF800524151 /* StoreCell.swift */,
+				C79147462354CAF800524151 /* StoreCell.xib */,
+			);
+			path = "Store Cell";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -134,6 +196,7 @@
 				C71736CF2338A2AA0067A5DD /* LaunchScreen.storyboard in Resources */,
 				C71736CC2338A2AA0067A5DD /* Assets.xcassets in Resources */,
 				C71736CA2338A2A80067A5DD /* Main.storyboard in Resources */,
+				C79147482354CAF800524151 /* StoreCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -145,9 +208,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				C71736D72338A6740067A5DD /* ExploreViewController.swift in Sources */,
+				C77913692356FAB800119601 /* StoreData.swift in Sources */,
+				C7A3CC62235AE05A009E359D /* StoreViewController.swift in Sources */,
+				C779136C2357212B00119601 /* StoreModel.swift in Sources */,
+				C7A3CC64235B6888009E359D /* MenuData.swift in Sources */,
+				C7A3CC66235B73C0009E359D /* MenuManager.swift in Sources */,
 				C71736C72338A2A80067A5DD /* ViewController.swift in Sources */,
 				C71736C32338A2A80067A5DD /* AppDelegate.swift in Sources */,
+				C79147472354CAF800524151 /* StoreCell.swift in Sources */,
 				C7008101234723E300687A01 /* Alert.swift in Sources */,
+				C7A3CC68235B74EB009E359D /* MenuModel.swift in Sources */,
+				C779136E235721A700119601 /* StoreManager.swift in Sources */,
+				C7914742235452F100524151 /* FavoritesViewController.swift in Sources */,
 				C71736C52338A2A80067A5DD /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

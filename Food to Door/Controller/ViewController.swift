@@ -25,7 +25,9 @@ class ViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         title = "Choose an Address"
+        navigationController?.navigationBar.tintColor = .red      
         
         checkLocationServices()
     }
@@ -35,7 +37,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
             setupLocationManager()
             checkLocationAuthorization()
         }else{
-            Alert.showBasicAlert(on: self)
+            Alert.showUnableToRetrieveLocationAlert(on: self)
         }
     }
     
@@ -49,13 +51,13 @@ class ViewController: UIViewController, MKMapViewDelegate {
         case .authorizedWhenInUse:
             startTrackingUserLocation()
         case .denied:
-            Alert.showBasicAlert(on: self)
+            Alert.showUnableToRetrieveLocationAlert(on: self)
             break
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
             break
         case .restricted:
-            Alert.showBasicAlert(on: self)
+            Alert.showUnableToRetrieveLocationAlert(on: self)
             break
         case .authorizedAlways:
             break
@@ -88,11 +90,16 @@ class ViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    @IBAction func confirmAddress(_ sender: UIButton) {
-        guard let exploreVC = storyboard?.instantiateViewController(identifier: "Explore") as? ExploreViewController else {return}
-        exploreVC.usersLocation = previousLocation
-        navigationController?.pushViewController(exploreVC, animated: true)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let tabBarController = segue.destination as! UITabBarController
+        if let navController = tabBarController.viewControllers?.first as? UINavigationController{
+            if let exploreVC = navController.viewControllers.first as? ExploreViewController{
+                exploreVC.userLocation = previousLocation
+            }
+        }
     }
+    
+    @IBAction func confirmAddress(_ sender: UIButton) {}
     
     @IBAction func addPin(_ sender: UILongPressGestureRecognizer) {
         
@@ -122,12 +129,12 @@ class ViewController: UIViewController, MKMapViewDelegate {
             guard let self = self else {return}
             
             if let _ = error{
-                Alert.showBasicAlert(on: self)
+                Alert.showUnableToRetrieveLocationAlert(on: self)
                 return
             }
             
             guard let placemark = placemarks?.first else{
-                Alert.showBasicAlert(on: self)
+                Alert.showUnableToRetrieveLocationAlert(on: self)
                 return
             }
             
@@ -158,5 +165,4 @@ extension ViewController: CLLocationManagerDelegate{
         
     }
 }
-
 
