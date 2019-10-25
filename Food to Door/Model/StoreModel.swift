@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct StoreModel{
+struct StoreModel: Codable{
     
     let storeImage: String
     let storeName: String

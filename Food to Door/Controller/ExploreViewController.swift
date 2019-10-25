@@ -15,6 +15,11 @@ class ExploreViewController: UIViewController {
     var userLocation: CLLocation?
     var storeManager = StoreManager()
     var storesArray = [StoreModel]()
+    var searchBar = UISearchBar()
+    
+    var searchedStoresNames = [String]()
+    var searchedStores = [StoreModel]()
+    var isSearching = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,17 +40,58 @@ class ExploreViewController: UIViewController {
         navigationItem.title = "Food to Door"
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "nav-search"), style: .plain, target: self, action: #selector(searchForStores))
         self.navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
-        
-        //Doesn't do anything. Just put it here to complete the look. When I swipe the screen down it goes back to map anyway.
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "nav-address"), style: .plain, target: self, action: nil)
     }
     
-    #warning("Write search methods")
-    @objc func searchForStores(){}
+    @objc func searchForStores(){
+    
+        navigationItem.rightBarButtonItem = nil
+        navigationItem.leftBarButtonItem = nil
+        searchBar.searchBarStyle = UISearchBar.Style.prominent
+        searchBar.placeholder = " Search..."
+        searchBar.sizeToFit()
+        searchBar.isTranslucent = false
+        searchBar.delegate = self
+        searchBar.showsCancelButton = true
+        navigationItem.titleView = searchBar
+    }
     
     private func setupTableView(){
         let nib = UINib(nibName: "StoreCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "StoreCellIdentifier")
+    }
+
+}
+
+//MARK: - UITableViewDelegate, UITableViewDataSource
+extension ExploreViewController: UITableViewDelegate, UITableViewDataSource{
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {        
+        if isSearching{
+            return searchedStores.count
+        }else{
+            return storesArray.count
+        }
+  
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "StoreCellIdentifier", for: indexPath) as? StoreCell else {fatalError()}
+        
+        if isSearching{
+            configure(cell: cell, array: self.searchedStores, with: indexPath)
+        }else{
+              configure(cell: cell, array: self.storesArray, with: indexPath)
+        }
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        guard let storeVC = storyboard?.instantiateViewController(identifier: "StoreVC") as? StoreViewController else {return}
+        storeVC.selectedStore = storesArray[indexPath.row]
+        navigationController?.pushViewController(storeVC, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func configure(cell: StoreCell, array: [StoreModel], with indexPath: IndexPath ){
@@ -79,28 +125,6 @@ class ExploreViewController: UIViewController {
     }
 }
 
-//MARK: - UITableViewDelegate, UITableViewDataSource
-extension ExploreViewController: UITableViewDelegate, UITableViewDataSource{
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return storesArray.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "StoreCellIdentifier", for: indexPath) as? StoreCell else {fatalError()}
-        configure(cell: cell, array: self.storesArray, with: indexPath)
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        guard let storeVC = storyboard?.instantiateViewController(identifier: "StoreVC") as? StoreViewController else {return}
-        storeVC.selectedStore = storesArray[indexPath.row]
-        navigationController?.pushViewController(storeVC, animated: true)
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-}
-
 //MARK: - StoreManagerDelegate Methods
 extension ExploreViewController: StoreManagerDelegate{
     func didUpdateStores(_ storeManager: StoreManager, stores: [StoreModel]) {
@@ -115,4 +139,29 @@ extension ExploreViewController: StoreManagerDelegate{
         print(error)
     }
     
+}
+
+//MARK: - UISearchBarDelegate
+extension ExploreViewController: UISearchBarDelegate{
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        navigationItem.titleView = nil
+        setupNavBar()
+        isSearching = false
+        tableView.reloadData()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        let storeNames = storesArray.map{$0.storeName}
+        searchedStoresNames = storeNames.filter({$0.prefix(searchText.count) == searchText})
+     
+        #warning("Adds a store more than once")
+        for i in storesArray{
+            if searchedStoresNames.contains(i.storeName){
+                searchedStores.append(i)
+            }
+        }
+        print(searchedStoresNames)
+        isSearching = true
+        tableView.reloadData()
+    }
 }

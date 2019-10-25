@@ -21,14 +21,50 @@ class StoreViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         menuManager.delegate = self
-        configureFavoritesButton()
+        loadFavorites()
         setupUI()
     }
     
-    func setupUI(){
+    override func viewWillAppear(_ animated: Bool) {
+        loadFavorites()
+        configureFavoritesButton()
+    }
+    
+    func saveFavorites(_ storesArray : [StoreModel]){
+        let defaults = UserDefaults.standard
+        let jsonEncoder = JSONEncoder()
+        if let savedData = try? jsonEncoder.encode(storesArray){
+            defaults.set(savedData, forKey: "favoriteStoresArray")
+        }else{
+            DispatchQueue.main.async {
+                Alert.showUnableToSaveToFavoritesAlert(on: self)
+            }
+        }
+    }
+    
+    func loadFavorites(){
         
+        if let navController = tabBarController?.viewControllers?[1] as? UINavigationController{
+            if let favoriteVC = navController.viewControllers.first as? FavoritesViewController{
+                DispatchQueue.global(qos: .background).async {
+                    let defaults = UserDefaults.standard
+                    if let favoriteStores = defaults.object(forKey: "favoriteStoresArray") as? Data{
+                        let jsonDecoder = JSONDecoder()
+                        do{
+                            favoriteVC.favoriteStores = try jsonDecoder.decode([StoreModel].self, from: favoriteStores)
+                        }catch{
+                            DispatchQueue.main.async {
+                                Alert.showUnableToLoadFavoritesAlert(on: self)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func setupUI(){
         if let selectedStore = selectedStore{
             DispatchQueue.global(qos: .background).async {
                 self.menuManager.fetchMenu(with: selectedStore.storeID)
@@ -43,7 +79,6 @@ class StoreViewController: UIViewController {
                     }
                 }
             }
-            
             DispatchQueue.main.async {
                 self.navigationItem.title = selectedStore.storeName
                 if selectedStore.deliveryFee == 0{
@@ -51,21 +86,60 @@ class StoreViewController: UIViewController {
                 }else{
                     self.deliveryLabel.text = "Delivery for $\(selectedStore.deliveryFee) in \(selectedStore.deliveryTime) min"
                 }
+                self.configureFavoritesButton()
             }
         }
     }
     
     func configureFavoritesButton(){
+        
+        if let navController = tabBarController?.viewControllers?[1] as? UINavigationController{
+            if let favoriteVC = navController.viewControllers.first as? FavoritesViewController{
+                if let selectedStore = selectedStore{
+                    let storeNames = favoriteVC.favoriteStores.map{$0.storeName}                    
+                    if storeNames.contains(selectedStore.storeName){
+                        DispatchQueue.main.async {
+                            self.favoritedUISetup()
+                        }
+                        return
+                    }else{
+                        DispatchQueue.main.async {
+                            self.unfavoritedUISetup()
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func favoritedUISetup(){
+        addToFavoritesButton.backgroundColor = .red
+        addToFavoritesButton.tintColor = .white
+        addToFavoritesButton.setTitle(" Favorited", for: .normal)
+        addToFavoritesButton.setImage(UIImage(named: "star-white"), for: .normal)
+    }
+    
+    func unfavoritedUISetup(){
         addToFavoritesButton.layer.cornerRadius = 1
         addToFavoritesButton.layer.borderWidth = 1
         addToFavoritesButton.layer.borderColor = UIColor.red.cgColor
     }
     
     @IBAction func addToFavoritesTapped(_ sender: UIButton) {
-        addToFavoritesButton.backgroundColor = .red
-        addToFavoritesButton.tintColor = .white
-        addToFavoritesButton.setTitle(" Favorited", for: .normal)
-        addToFavoritesButton.setImage(UIImage(named: "star-white"), for: .normal)
+        favoritedUISetup()
+        if let navController = tabBarController?.viewControllers?[1] as? UINavigationController{
+            if let favoriteVC = navController.viewControllers.first as? FavoritesViewController{
+                if let selectedStore = selectedStore{
+                    for i in favoriteVC.favoriteStores{
+                        if i.storeID == selectedStore.storeID{
+                            return
+                        }
+                    }
+                    favoriteVC.favoriteStores.append(selectedStore)
+                    saveFavorites(favoriteVC.favoriteStores)
+                }
+            }
+        }
     }
 }
 

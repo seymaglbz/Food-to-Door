@@ -28,5 +28,11 @@ struct Alert{
     static func showUnableToRetrieveMenusAlert(on vc: UIViewController){
         showBasicAlert(on: vc, with: "Menus couldn't be loaded", message: "Please check your internet connection")
     }
+    static func showUnableToSaveToFavoritesAlert(on vc: UIViewController){
+        showBasicAlert(on: vc, with: "Failed to save the store to your favorite stores list", message: "Please try again later")
+    }
+    static func showUnableToLoadFavoritesAlert(on vc: UIViewController){
+        showBasicAlert(on: vc, with: "Failed to load your favorite stores", message: "Please try again later")
+    }
 }
 

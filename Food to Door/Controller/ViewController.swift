@@ -69,7 +69,6 @@ class ViewController: UIViewController, MKMapViewDelegate {
     func startTrackingUserLocation(){
         mapView.showsUserLocation = true
         centerViewOnUserLocation()
-        // locationManager.startUpdatingLocation()
         previousLocation = getCenterLocation(for: mapView)
         if let previousLocation = previousLocation{
             reverseGeoCode(from: previousLocation)
@@ -150,16 +149,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
 }
 
 extension ViewController: CLLocationManagerDelegate{
-    
-    //    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-    //        guard let location = locations.last else {return}
-    //        let region = MKCoordinateRegion.init(center: location.coordinate, latitudinalMeters: regionInMeters, longitudinalMeters: regionInMeters)
-    //        mapView.setRegion(region, animated: true)
-    //        centerViewOnUserLocation()
-    //
-    //        reverseGeoCode(from: location)
-    //    }
-    
+
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         checkLocationAuthorization()
         
