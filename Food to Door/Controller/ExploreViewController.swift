@@ -44,7 +44,7 @@ class ExploreViewController: UIViewController {
     }
     
     @objc func searchForStores(){
-    
+        
         navigationItem.rightBarButtonItem = nil
         navigationItem.leftBarButtonItem = nil
         searchBar.searchBarStyle = UISearchBar.Style.prominent
@@ -57,31 +57,31 @@ class ExploreViewController: UIViewController {
     }
     
     private func setupTableView(){
-        let nib = UINib(nibName: "StoreCell", bundle: nil)
-        tableView.register(nib, forCellReuseIdentifier: "StoreCellIdentifier")
+        tableView.register(StoreCell.self, forCellReuseIdentifier: Cells.storeCell)
     }
-
+    
 }
 
 //MARK: - UITableViewDelegate, UITableViewDataSource
 extension ExploreViewController: UITableViewDelegate, UITableViewDataSource{
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {        
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isSearching{
             return searchedStores.count
         }else{
             return storesArray.count
         }
-  
+        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "StoreCellIdentifier", for: indexPath) as? StoreCell else {fatalError()}
-        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: Cells.storeCell) as? StoreCell else {fatalError()}
         if isSearching{
-            configure(cell: cell, array: self.searchedStores, with: indexPath)
+            let searchedStore = searchedStores[indexPath.row]
+            cell.set(searchedStore)
         }else{
-              configure(cell: cell, array: self.storesArray, with: indexPath)
+            let store = storesArray[indexPath.row]
+            cell.set(store)
         }
         return cell
     }
@@ -94,35 +94,6 @@ extension ExploreViewController: UITableViewDelegate, UITableViewDataSource{
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    func configure(cell: StoreCell, array: [StoreModel], with indexPath: IndexPath ){
-        
-        let urlString = array[indexPath.row].storeImage
-        if let url = URL(string: urlString){
-            if let data = try? Data(contentsOf: url){
-                if let image = UIImage(data: data){
-                    DispatchQueue.main.async {
-                        cell.storeImage.image = image
-                        cell.storeImage.contentMode = .scaleAspectFit
-                    }
-                }
-            }
-        }
-        DispatchQueue.main.async {
-            cell.storeNameLabel.text = array[indexPath.row].storeName
-            cell.storeTypeLabel.text = array[indexPath.row].storeType
-            
-            if array[indexPath.row].deliveryTime == 0{
-                cell.deliveryTimeLabel.text = "-"
-            }else{
-                cell.deliveryTimeLabel.text = "\(array[indexPath.row].deliveryTime) min"
-            }
-            if array[indexPath.row].deliveryFee == 0{
-                cell.deliveryTypeLabel.text = "Free Delivery"
-            }else{
-                cell.deliveryTypeLabel.text = "$\(array[indexPath.row].deliveryFee)"
-            }
-        }
-    }
 }
 
 //MARK: - StoreManagerDelegate Methods
@@ -153,7 +124,7 @@ extension ExploreViewController: UISearchBarDelegate{
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         let storeNames = storesArray.map{$0.storeName}
         searchedStoresNames = storeNames.filter({$0.prefix(searchText.count) == searchText})
-     
+        
         #warning("Adds a store more than once")
         for i in storesArray{
             if searchedStoresNames.contains(i.storeName){

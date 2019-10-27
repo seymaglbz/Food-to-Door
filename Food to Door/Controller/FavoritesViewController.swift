@@ -56,8 +56,7 @@ class FavoritesViewController: UIViewController {
     }
     
     private func setupTableView(){
-        let nib = UINib(nibName: "StoreCell", bundle: nil)
-        tableView.register(nib, forCellReuseIdentifier: "StoreCellIdentifier")
+       tableView.register(StoreCell.self, forCellReuseIdentifier: Cells.storeCell)
     }
     
     func setupNavBar(){
@@ -87,8 +86,9 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "StoreCellIdentifier", for: indexPath) as? StoreCell else {fatalError()}
-        configure(cell: cell, array: self.favoriteStores, with: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: Cells.storeCell) as? StoreCell else {fatalError()}
+        let favoriteStore = favoriteStores[indexPath.row]
+        cell.set(favoriteStore)
         return cell
     }
     
@@ -101,40 +101,13 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let storeVC = storyboard?.instantiateViewController(identifier: "StoreVC") as? StoreViewController else {return}
+        let storyboard = UIStoryboard(name: "Explore", bundle: nil)
+        guard let storeVC = storyboard.instantiateViewController(identifier: "StoreVC") as? StoreViewController else {return}
         storeVC.selectedStore = favoriteStores[indexPath.row]
         navigationController?.pushViewController(storeVC, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
     }
-    
-    func configure(cell: StoreCell, array: [StoreModel], with indexPath: IndexPath ){
-        let urlString = array[indexPath.row].storeImage
-        if let url = URL(string: urlString){
-            if let data = try? Data(contentsOf: url){
-                if let image = UIImage(data: data){
-                    DispatchQueue.main.async {
-                        cell.storeImage.image = image
-                        cell.storeImage.contentMode = .scaleAspectFit
-                    }
-                }
-            }
-        }
-        DispatchQueue.main.async {
-            cell.storeNameLabel.text = array[indexPath.row].storeName
-            cell.storeTypeLabel.text = array[indexPath.row].storeType
-            
-            if array[indexPath.row].deliveryTime == 0{
-                cell.deliveryTimeLabel.text = "-"
-            }else{
-                cell.deliveryTimeLabel.text = "\(array[indexPath.row].deliveryTime) min"
-            }
-            if array[indexPath.row].deliveryFee == 0{
-                cell.deliveryTypeLabel.text = "Free Delivery"
-            }else{
-                cell.deliveryTypeLabel.text = "$\(array[indexPath.row].deliveryFee)"
-            }
-        }
-    }
+ 
 }
 
 //MARK: - UISearchBarDelegate

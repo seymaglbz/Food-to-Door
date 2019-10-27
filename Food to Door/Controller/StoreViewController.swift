@@ -12,7 +12,7 @@ class StoreViewController: UIViewController {
     
     @IBOutlet var storeImage: UIImageView!
     @IBOutlet var deliveryLabel: UILabel!
-    @IBOutlet var addToFavoritesButton: UIButton!
+    @IBOutlet weak var addToFavoritesButton: FavoriteButton!
     @IBOutlet var tableView: UITableView!
     
     var menuArray = [MenuModel]()
@@ -28,7 +28,9 @@ class StoreViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         loadFavorites()
-        configureFavoritesButton()
+        if let tabBarController = self.tabBarController, let selectedStore = selectedStore{
+            self.addToFavoritesButton.configureFavoritesButton(tabBarController: tabBarController, store: selectedStore)
+        }
     }
     
     func saveFavorites(_ storesArray : [StoreModel]){
@@ -44,7 +46,6 @@ class StoreViewController: UIViewController {
     }
     
     func loadFavorites(){
-        
         if let navController = tabBarController?.viewControllers?[1] as? UINavigationController{
             if let favoriteVC = navController.viewControllers.first as? FavoritesViewController{
                 DispatchQueue.global(qos: .background).async {
@@ -86,47 +87,15 @@ class StoreViewController: UIViewController {
                 }else{
                     self.deliveryLabel.text = "Delivery for $\(selectedStore.deliveryFee) in \(selectedStore.deliveryTime) min"
                 }
-                self.configureFavoritesButton()
-            }
-        }
-    }
-    
-    func configureFavoritesButton(){
-        
-        if let navController = tabBarController?.viewControllers?[1] as? UINavigationController{
-            if let favoriteVC = navController.viewControllers.first as? FavoritesViewController{
-                if let selectedStore = selectedStore{
-                    let storeNames = favoriteVC.favoriteStores.map{$0.storeName}                    
-                    if storeNames.contains(selectedStore.storeName){
-                        DispatchQueue.main.async {
-                            self.favoritedUISetup()
-                        }
-                        return
-                    }else{
-                        DispatchQueue.main.async {
-                            self.unfavoritedUISetup()
-                        }
-                    }
+                if let tabBarController = self.tabBarController{
+                    self.addToFavoritesButton.configureFavoritesButton(tabBarController: tabBarController, store: selectedStore)
                 }
             }
         }
     }
     
-    func favoritedUISetup(){
-        addToFavoritesButton.backgroundColor = .red
-        addToFavoritesButton.tintColor = .white
-        addToFavoritesButton.setTitle(" Favorited", for: .normal)
-        addToFavoritesButton.setImage(UIImage(named: "star-white"), for: .normal)
-    }
-    
-    func unfavoritedUISetup(){
-        addToFavoritesButton.layer.cornerRadius = 1
-        addToFavoritesButton.layer.borderWidth = 1
-        addToFavoritesButton.layer.borderColor = UIColor.red.cgColor
-    }
-    
-    @IBAction func addToFavoritesTapped(_ sender: UIButton) {
-        favoritedUISetup()
+    @IBAction func addToFavoritesTapped(_ sender: FavoriteButton) {
+        addToFavoritesButton.favoritedUISetup()
         if let navController = tabBarController?.viewControllers?[1] as? UINavigationController{
             if let favoriteVC = navController.viewControllers.first as? FavoritesViewController{
                 if let selectedStore = selectedStore{
@@ -141,6 +110,7 @@ class StoreViewController: UIViewController {
             }
         }
     }
+    
 }
 
 //MARK: - UITableViewDelegate, UITableViewDataSource
