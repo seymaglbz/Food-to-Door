@@ -34,6 +34,11 @@ class ExploreViewController: UIViewController {
         
         setupTableView()
         setupNavBar()
+        
+    }
+    
+    private func setupTableView(){
+        tableView.register(StoreCell.self, forCellReuseIdentifier: Cells.storeCell)
     }
     
     func setupNavBar(){
@@ -53,13 +58,9 @@ class ExploreViewController: UIViewController {
         searchBar.isTranslucent = false
         searchBar.delegate = self
         searchBar.showsCancelButton = true
+        searchBar.returnKeyType = UIReturnKeyType.done
         navigationItem.titleView = searchBar
     }
-    
-    private func setupTableView(){
-        tableView.register(StoreCell.self, forCellReuseIdentifier: Cells.storeCell)
-    }
-    
 }
 
 //MARK: - UITableViewDelegate, UITableViewDataSource
@@ -71,7 +72,6 @@ extension ExploreViewController: UITableViewDelegate, UITableViewDataSource{
         }else{
             return storesArray.count
         }
-        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -89,11 +89,16 @@ extension ExploreViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         guard let storeVC = storyboard?.instantiateViewController(identifier: "StoreVC") as? StoreViewController else {return}
-        storeVC.selectedStore = storesArray[indexPath.row]
+        
+        if isSearching{
+            storeVC.selectedStore = searchedStores[indexPath.row]
+        }else{
+            storeVC.selectedStore = storesArray[indexPath.row]
+        }
+        
         navigationController?.pushViewController(storeVC, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
     }
-    
 }
 
 //MARK: - StoreManagerDelegate Methods
@@ -118,21 +123,26 @@ extension ExploreViewController: UISearchBarDelegate{
         navigationItem.titleView = nil
         setupNavBar()
         isSearching = false
+        searchBar.searchTextField.text = ""
         tableView.reloadData()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         let storeNames = storesArray.map{$0.storeName}
         searchedStoresNames = storeNames.filter({$0.prefix(searchText.count) == searchText})
+        searchedStores.removeAll()
         
-        #warning("Adds a store more than once")
         for i in storesArray{
             if searchedStoresNames.contains(i.storeName){
                 searchedStores.append(i)
             }
         }
-        print(searchedStoresNames)
         isSearching = true
         tableView.reloadData()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.searchTextField.text = ""
+        searchBar.searchTextField.endEditing(true)
     }
 }
