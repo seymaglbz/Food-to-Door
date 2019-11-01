@@ -15,8 +15,8 @@ class StoreViewController: UIViewController {
     @IBOutlet weak var addToFavoritesButton: FavoriteButton!
     @IBOutlet var tableView: UITableView!
     
-    var menuArray = [MenuModel]()
-    var menuManager = MenuManager()
+    private var menuArray = [MenuModel]()
+    private var menuManager = MenuManager()
     var selectedStore: StoreModel?
     
     override func viewDidLoad() {
@@ -33,7 +33,7 @@ class StoreViewController: UIViewController {
         }
     }
     
-    func saveFavorites(_ storesArray : [StoreModel]){
+    private func saveFavorites(_ storesArray : [StoreModel]){
         let defaults = UserDefaults.standard
         let jsonEncoder = JSONEncoder()
         if let savedData = try? jsonEncoder.encode(storesArray){
@@ -45,7 +45,7 @@ class StoreViewController: UIViewController {
         }
     }
     
-    func loadFavorites(){
+    private func loadFavorites(){
         if let navController = tabBarController?.viewControllers?[1] as? UINavigationController{
             if let favoriteVC = navController.viewControllers.first as? FavoritesViewController{
                 DispatchQueue.global(qos: .background).async {
@@ -65,7 +65,7 @@ class StoreViewController: UIViewController {
         }
     }
     
-    func setupUI(){
+    private func setupUI(){
         if let selectedStore = selectedStore{
             DispatchQueue.global(qos: .background).async {
                 self.menuManager.fetchMenu(with: selectedStore.storeID)

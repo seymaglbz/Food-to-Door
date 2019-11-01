@@ -16,12 +16,12 @@ class ViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet var addressLabel: UILabel!
     @IBOutlet var confirmAddressButton: UIButton!
     
-    let locationManager = CLLocationManager()
-    let regionInMeters: Double = 200
+    private let locationManager = CLLocationManager()
+    private let regionInMeters: Double = 200
     
-    var previousLocation: CLLocation?
-    var placemark: CLPlacemark?
-    var geoCoder: CLGeocoder!
+    private var previousLocation: CLLocation?
+    private var placemark: CLPlacemark?
+    private var geoCoder: CLGeocoder!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +32,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
         checkLocationServices()
     }
     
-    func checkLocationServices(){
+    private func checkLocationServices(){
         if CLLocationManager.locationServicesEnabled(){
             setupLocationManager()
             checkLocationAuthorization()
@@ -41,12 +41,12 @@ class ViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    func setupLocationManager(){
+    private func setupLocationManager(){
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
     }
     
-    func checkLocationAuthorization(){
+    private func checkLocationAuthorization(){
         switch CLLocationManager.authorizationStatus(){
         case .authorizedWhenInUse:
             startTrackingUserLocation()
@@ -66,7 +66,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    func startTrackingUserLocation(){
+    private func startTrackingUserLocation(){
         mapView.showsUserLocation = true
         centerViewOnUserLocation()
         previousLocation = getCenterLocation(for: mapView)
@@ -75,14 +75,14 @@ class ViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    func getCenterLocation(for mapView: MKMapView) -> CLLocation{
+    private func getCenterLocation(for mapView: MKMapView) -> CLLocation{
         let latitude = mapView.centerCoordinate.latitude
         let longitude = mapView.centerCoordinate.longitude
         
         return CLLocation(latitude: latitude, longitude: longitude)
     }
     
-    func centerViewOnUserLocation(){
+    private func centerViewOnUserLocation(){
         if let location = locationManager.location?.coordinate{
             let region = MKCoordinateRegion.init(center: location, latitudinalMeters: regionInMeters, longitudinalMeters: regionInMeters)
             mapView.setRegion(region, animated: true)
@@ -122,7 +122,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
         reverseGeoCode(from: previousLocation)
     }
     
-    func reverseGeoCode(from location: CLLocation){
+    private func reverseGeoCode(from location: CLLocation){
         geoCoder = CLGeocoder()
         geoCoder.reverseGeocodeLocation(location) { [weak self ](placemarks, error) in
             guard let self = self else {return}
@@ -149,7 +149,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
 }
 
 extension ViewController: CLLocationManagerDelegate{
-
+    
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         checkLocationAuthorization()
         

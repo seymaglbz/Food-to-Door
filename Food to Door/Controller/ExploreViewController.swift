@@ -13,13 +13,13 @@ class ExploreViewController: UIViewController {
     
     @IBOutlet var tableView: UITableView!
     var userLocation: CLLocation?
-    var storeManager = StoreManager()
-    var storesArray = [StoreModel]()
-    var searchBar = UISearchBar()
+    private var storeManager = StoreManager()
+    private var storesArray = [StoreModel]()
+    private var searchBar = UISearchBar()
     
-    var searchedStoresNames = [String]()
-    var searchedStores = [StoreModel]()
-    var isSearching = false
+    private var searchedStoresNames = [String]()
+    private var searchedStores = [StoreModel]()
+    private var isSearching = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +41,7 @@ class ExploreViewController: UIViewController {
         tableView.register(StoreCell.self, forCellReuseIdentifier: Cells.storeCell)
     }
     
-    func setupNavBar(){
+    private func setupNavBar(){
         navigationItem.title = "Food to Door"
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "nav-search"), style: .plain, target: self, action: #selector(searchForStores))
         self.navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
