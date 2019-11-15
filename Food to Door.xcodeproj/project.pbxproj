@@ -18,15 +18,14 @@
 		C76AE0502366002600D9CD77 /* FavoriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76AE04F2366002600D9CD77 /* FavoriteButton.swift */; };
 		C77913692356FAB800119601 /* StoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77913682356FAB800119601 /* StoreData.swift */; };
 		C779136C2357212B00119601 /* StoreModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C779136B2357212B00119601 /* StoreModel.swift */; };
-		C779136E235721A700119601 /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C779136D235721A700119601 /* StoreManager.swift */; };
 		C77E0DD223656B1100D93D99 /* Explore.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C77E0DD123656B1100D93D99 /* Explore.storyboard */; };
 		C77E0DD423656B2700D93D99 /* Favorites.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C77E0DD323656B2700D93D99 /* Favorites.storyboard */; };
 		C7914742235452F100524151 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7914741235452F100524151 /* FavoritesViewController.swift */; };
 		C79147472354CAF800524151 /* StoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79147452354CAF800524151 /* StoreCell.swift */; };
 		C7A3CC62235AE05A009E359D /* StoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A3CC61235AE05A009E359D /* StoreViewController.swift */; };
 		C7A3CC64235B6888009E359D /* MenuData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A3CC63235B6888009E359D /* MenuData.swift */; };
-		C7A3CC66235B73C0009E359D /* MenuManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A3CC65235B73C0009E359D /* MenuManager.swift */; };
 		C7A3CC68235B74EB009E359D /* MenuModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A3CC67235B74EB009E359D /* MenuModel.swift */; };
+		C7E9FF9B237EA20000F23786 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E9FF9A237EA1FF00F23786 /* NetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,15 +42,14 @@
 		C76AE04F2366002600D9CD77 /* FavoriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteButton.swift; sourceTree = "<group>"; };
 		C77913682356FAB800119601 /* StoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreData.swift; sourceTree = "<group>"; };
 		C779136B2357212B00119601 /* StoreModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreModel.swift; sourceTree = "<group>"; };
-		C779136D235721A700119601 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
 		C77E0DD123656B1100D93D99 /* Explore.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Explore.storyboard; sourceTree = "<group>"; };
 		C77E0DD323656B2700D93D99 /* Favorites.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Favorites.storyboard; sourceTree = "<group>"; };
 		C7914741235452F100524151 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		C79147452354CAF800524151 /* StoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreCell.swift; sourceTree = "<group>"; };
 		C7A3CC61235AE05A009E359D /* StoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreViewController.swift; sourceTree = "<group>"; };
 		C7A3CC63235B6888009E359D /* MenuData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuData.swift; sourceTree = "<group>"; };
-		C7A3CC65235B73C0009E359D /* MenuManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuManager.swift; sourceTree = "<group>"; };
 		C7A3CC67235B74EB009E359D /* MenuModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuModel.swift; sourceTree = "<group>"; };
+		C7E9FF9A237EA1FF00F23786 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,12 +98,11 @@
 		C779136A2356FABD00119601 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				C7E9FF9A237EA1FF00F23786 /* NetworkManager.swift */,
 				C77913682356FAB800119601 /* StoreData.swift */,
 				C779136B2357212B00119601 /* StoreModel.swift */,
-				C779136D235721A700119601 /* StoreManager.swift */,
 				C7A3CC63235B6888009E359D /* MenuData.swift */,
 				C7A3CC67235B74EB009E359D /* MenuModel.swift */,
-				C7A3CC65235B73C0009E359D /* MenuManager.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -226,15 +223,14 @@
 				C77913692356FAB800119601 /* StoreData.swift in Sources */,
 				C7A3CC62235AE05A009E359D /* StoreViewController.swift in Sources */,
 				C76AE0502366002600D9CD77 /* FavoriteButton.swift in Sources */,
+				C7E9FF9B237EA20000F23786 /* NetworkManager.swift in Sources */,
 				C779136C2357212B00119601 /* StoreModel.swift in Sources */,
 				C7A3CC64235B6888009E359D /* MenuData.swift in Sources */,
-				C7A3CC66235B73C0009E359D /* MenuManager.swift in Sources */,
 				C71736C72338A2A80067A5DD /* ViewController.swift in Sources */,
 				C71736C32338A2A80067A5DD /* AppDelegate.swift in Sources */,
 				C79147472354CAF800524151 /* StoreCell.swift in Sources */,
 				C7008101234723E300687A01 /* Alert.swift in Sources */,
 				C7A3CC68235B74EB009E359D /* MenuModel.swift in Sources */,
-				C779136E235721A700119601 /* StoreManager.swift in Sources */,
 				C7914742235452F100524151 /* FavoritesViewController.swift in Sources */,
 				C71736C52338A2A80067A5DD /* SceneDelegate.swift in Sources */,
 			);

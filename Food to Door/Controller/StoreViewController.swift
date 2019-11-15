@@ -16,12 +16,10 @@ class StoreViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
     
     private var menuArray = [MenuModel]()
-    private var menuManager = MenuManager()
     var selectedStore: StoreModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        menuManager.delegate = self
         loadFavorites()
         setupUI()
     }
@@ -67,8 +65,17 @@ class StoreViewController: UIViewController {
     
     private func setupUI(){
         if let selectedStore = selectedStore{
-            DispatchQueue.global(qos: .background).async {
-                self.menuManager.fetchMenu(with: selectedStore.storeID)
+            DispatchQueue.global(qos: .background).async {             
+                NetworkManager.shared.fetchMenu(with: selectedStore.storeID) { (menus) in
+                        guard let menus = menus else {
+                                    Alert.showUnableToRetrieveMenusAlert(on: self)
+                                    return
+                                }
+                                self.menuArray = menus
+                                DispatchQueue.main.async {
+                                    self.tableView.reloadData()
+                                }
+                }
             }
             let urlString = selectedStore.storeImage
             if let url = URL(string: urlString){
@@ -127,18 +134,3 @@ extension StoreViewController: UITableViewDelegate, UITableViewDataSource{
     }
 }
 
-//MARK: - MenuManagerDelegate
-extension StoreViewController: MenuManagerDelegate{
-    func didUpdateMenu(_ menuManager: MenuManager, menu: [MenuModel]) {
-        menuArray = menu
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
-    }
-    
-    func didFailWithError(error: Error) {
-        Alert.showUnableToRetrieveMenusAlert(on: self)
-        print(error)
-    }
-    
-}
