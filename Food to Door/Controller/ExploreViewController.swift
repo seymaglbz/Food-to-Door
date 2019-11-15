@@ -10,11 +10,11 @@ import UIKit
 import CoreLocation
 
 class ExploreViewController: UIViewController {
-    
+
     @IBOutlet var tableView: UITableView!
     var userLocation: CLLocation?
-    private var storeManager = StoreManager()
-    private var storesArray = [StoreModel]()
+    
+     var storesArray = [StoreModel]()
     private var searchBar = UISearchBar()
     
     private var searchedStoresNames = [String]()
@@ -26,12 +26,20 @@ class ExploreViewController: UIViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-        storeManager.delegate = self
         
         if let latitude = userLocation?.coordinate.latitude, let longitude = userLocation?.coordinate.longitude{
-            storeManager.fetchStores(latitude: latitude, longitude: longitude)
-        }
-        
+            NetworkManager.shared.fetchStores(latitude: latitude, longitude: longitude){ stores in
+                guard let stores = stores else {
+                    Alert.showUnableToRetrieveStoresAlert(on: self)
+                    return
+                }
+                self.storesArray = stores
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+              }
+
         setupTableView()
         setupNavBar()
         
@@ -80,7 +88,7 @@ extension ExploreViewController: UITableViewDelegate, UITableViewDataSource{
             let searchedStore = searchedStores[indexPath.row]
             cell.set(searchedStore)
         }else{
-            let store = storesArray[indexPath.row]
+           let store = storesArray[indexPath.row]
             cell.set(store)
         }
         return cell
@@ -99,22 +107,6 @@ extension ExploreViewController: UITableViewDelegate, UITableViewDataSource{
         navigationController?.pushViewController(storeVC, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
     }
-}
-
-//MARK: - StoreManagerDelegate Methods
-extension ExploreViewController: StoreManagerDelegate{
-    func didUpdateStores(_ storeManager: StoreManager, stores: [StoreModel]) {
-        storesArray = stores
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
-    }
-    
-    func didFailWithError(error: Error){
-        Alert.showUnableToRetrieveStoresAlert(on: self)
-        print(error)
-    }
-    
 }
 
 //MARK: - UISearchBarDelegate

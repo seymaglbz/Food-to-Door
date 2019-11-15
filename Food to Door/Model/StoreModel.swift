@@ -17,4 +17,5 @@ struct StoreModel: Codable{
     let deliveryTime: Int
     let storeID: Int
     
+    
 }
