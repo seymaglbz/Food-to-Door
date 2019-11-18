@@ -15,8 +15,8 @@ class StoreViewController: UIViewController {
     @IBOutlet weak var addToFavoritesButton: FavoriteButton!
     @IBOutlet var tableView: UITableView!
     
-    private var menuArray = [MenuModel]()
-    var selectedStore: StoreModel?
+    private var menuArray = [String]()
+    var selectedStore: Store?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,7 +31,7 @@ class StoreViewController: UIViewController {
         }
     }
     
-    private func saveFavorites(_ storesArray : [StoreModel]){
+    private func saveFavorites(_ storesArray : [Store]){
         let defaults = UserDefaults.standard
         let jsonEncoder = JSONEncoder()
         if let savedData = try? jsonEncoder.encode(storesArray){
@@ -51,7 +51,7 @@ class StoreViewController: UIViewController {
                     if let favoriteStores = defaults.object(forKey: "favoriteStoresArray") as? Data{
                         let jsonDecoder = JSONDecoder()
                         do{
-                            favoriteVC.favoriteStores = try jsonDecoder.decode([StoreModel].self, from: favoriteStores)
+                            favoriteVC.favoriteStores = try jsonDecoder.decode([Store].self, from: favoriteStores)
                         }catch{
                             DispatchQueue.main.async {
                                 Alert.showUnableToLoadFavoritesAlert(on: self)
@@ -65,16 +65,16 @@ class StoreViewController: UIViewController {
     
     private func setupUI(){
         if let selectedStore = selectedStore{
-            DispatchQueue.global(qos: .background).async {             
+            DispatchQueue.global(qos: .background).async {
                 NetworkManager.shared.fetchMenu(with: selectedStore.storeID) { (menus) in
-                        guard let menus = menus else {
-                                    Alert.showUnableToRetrieveMenusAlert(on: self)
-                                    return
-                                }
-                                self.menuArray = menus
-                                DispatchQueue.main.async {
-                                    self.tableView.reloadData()
-                                }
+                    guard let menus = menus else {
+                        Alert.showUnableToRetrieveMenusAlert(on: self)
+                        return
+                    }
+                    self.menuArray = menus
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
                 }
             }
             let urlString = selectedStore.storeImage
@@ -88,14 +88,19 @@ class StoreViewController: UIViewController {
                 }
             }
             DispatchQueue.main.async {
-                self.navigationItem.title = selectedStore.storeName
-                if selectedStore.deliveryFee == 0{
-                    self.deliveryLabel.text = "Free Delivery in \(selectedStore.deliveryTime) min"
-                }else{
-                    self.deliveryLabel.text = "Delivery for $\(selectedStore.deliveryFee) in \(selectedStore.deliveryTime) min"
-                }
-                if let tabBarController = self.tabBarController{
-                    self.addToFavoritesButton.configureFavoritesButton(tabBarController: tabBarController, store: selectedStore)
+                self.navigationItem.title = selectedStore.storeName.name
+                if let deliveryTime = selectedStore.deliveryTime, let deliveryFee = selectedStore.deliveryFee{
+                    if selectedStore.deliveryFee == 0{
+                        self.deliveryLabel.text = "Free Delivery in \(deliveryTime) min"
+                    }else{
+                        self.deliveryLabel.text = "Delivery for $\(deliveryFee) in \(deliveryTime) min"
+                    }
+                    if deliveryTime == 0{
+                        self.deliveryLabel.text = "Free Delivery"
+                    }
+                    if let tabBarController = self.tabBarController{
+                        self.addToFavoritesButton.configureFavoritesButton(tabBarController: tabBarController, store: selectedStore)
+                    }
                 }
             }
         }
@@ -129,7 +134,7 @@ extension StoreViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "menuCell", for: indexPath)
-        cell.textLabel?.text = menuArray[indexPath.row].title
+        cell.textLabel?.text = menuArray[indexPath.row]
         return cell
     }
 }
