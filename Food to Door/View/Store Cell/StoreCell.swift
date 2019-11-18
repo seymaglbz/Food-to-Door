@@ -55,7 +55,7 @@ class StoreCell: UITableViewCell {
         storeImage.widthAnchor.constraint(equalToConstant: 140).isActive = true
     }
     
-   private func setLabelConstraints(){
+    private func setLabelConstraints(){
         storeNameLabel.translatesAutoresizingMaskIntoConstraints = false
         storeTypeLabel.translatesAutoresizingMaskIntoConstraints = false
         deliveryTypeLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -82,7 +82,8 @@ class StoreCell: UITableViewCell {
         deliveryTimeLabel.heightAnchor.constraint(equalToConstant: 15).isActive = true
     }
     
-    func set(_ store: StoreModel){
+    func set(_ store: Store){
+        
         let urlString = store.storeImage
         if let url = URL(string: urlString){
             if let data = try? Data(contentsOf: url){
@@ -94,20 +95,25 @@ class StoreCell: UITableViewCell {
                 }
             }
         }
+        
         DispatchQueue.main.async {
-            self.storeNameLabel.text = store.storeName
+            self.storeNameLabel.text = store.storeName.name
             self.storeTypeLabel.text = store.storeType
+            if let deliveryTime = store.deliveryTime, let deliveryFee = store.deliveryFee{
+                if deliveryTime == 0{
+                    self.deliveryTimeLabel.text = "-"
+                }else{
+                    self.deliveryTimeLabel.text = "\(deliveryTime) min"
+                }
+                if deliveryFee == 0{
+                    self.deliveryTypeLabel.text = "Free Delivery"
+                }else{
+                    self.deliveryTypeLabel.text = "$\(deliveryFee)"
+                }
+            }
             
-            if store.deliveryTime == 0{
-                self.deliveryTimeLabel.text = "-"
-            }else{
-                self.deliveryTimeLabel.text = "\(store.deliveryTime) min"
-            }
-            if store.deliveryFee == 0{
-                self.deliveryTypeLabel.text = "Free Delivery"
-            }else{
-                self.deliveryTypeLabel.text = "$\(store.deliveryFee)"
-            }
+            
+            
         }
     }
 }

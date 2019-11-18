@@ -11,10 +11,10 @@ import UIKit
 class FavoritesViewController: UIViewController {
     
     @IBOutlet var tableView: UITableView!
-    var favoriteStores = [StoreModel]()
+    var favoriteStores = [Store]()
     private var searchBar = UISearchBar()
     private var searchedStoresNames = [String]()
-    private var searchedStores = [StoreModel]()
+    private var searchedStores = [Store]()
     private var isSearching = false
     
     override func viewDidLoad() {
@@ -44,7 +44,7 @@ class FavoritesViewController: UIViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "nav-address"), style: .plain, target: self, action: nil)
     }
     
-    private func saveFavorites(_ storesArray : [StoreModel]){
+    private func saveFavorites(_ storesArray : [Store]){
         let defaults = UserDefaults.standard
         let jsonEncoder = JSONEncoder()
         if let savedData = try? jsonEncoder.encode(storesArray){
@@ -61,7 +61,7 @@ class FavoritesViewController: UIViewController {
         if let favoriteStores = defaults.object(forKey: "favoriteStoresArray") as? Data{
             let jsonDecoder = JSONDecoder()
             do{
-                self.favoriteStores = try jsonDecoder.decode([StoreModel].self, from: favoriteStores)
+                self.favoriteStores = try jsonDecoder.decode([Store].self, from: favoriteStores)
             }catch{
                 DispatchQueue.main.async {
                     Alert.showUnableToLoadFavoritesAlert(on: self)
@@ -139,12 +139,12 @@ extension FavoritesViewController: UISearchBarDelegate{
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        let storeNames = favoriteStores.map{$0.storeName}
+        let storeNames = favoriteStores.map{$0.storeName.name}
         searchedStoresNames = storeNames.filter({$0.prefix(searchText.count) == searchText})
         searchedStores.removeAll()
         
         for i in favoriteStores{
-            if searchedStoresNames.contains(i.storeName){
+            if searchedStoresNames.contains(i.storeName.name){
                 searchedStores.append(i)
             }
         }

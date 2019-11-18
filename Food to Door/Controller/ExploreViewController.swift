@@ -10,15 +10,15 @@ import UIKit
 import CoreLocation
 
 class ExploreViewController: UIViewController {
-
+    
     @IBOutlet var tableView: UITableView!
     var userLocation: CLLocation?
     
-     var storesArray = [StoreModel]()
+    var storesArray = [Store]()
     private var searchBar = UISearchBar()
     
     private var searchedStoresNames = [String]()
-    private var searchedStores = [StoreModel]()
+    private var searchedStores = [Store]()
     private var isSearching = false
     
     override func viewDidLoad() {
@@ -38,11 +38,10 @@ class ExploreViewController: UIViewController {
                     self.tableView.reloadData()
                 }
             }
-              }
-
+        }
+        
         setupTableView()
         setupNavBar()
-        
     }
     
     private func setupTableView(){
@@ -57,7 +56,6 @@ class ExploreViewController: UIViewController {
     }
     
     @objc func searchForStores(){
-        
         navigationItem.rightBarButtonItem = nil
         navigationItem.leftBarButtonItem = nil
         searchBar.searchBarStyle = UISearchBar.Style.prominent
@@ -88,7 +86,7 @@ extension ExploreViewController: UITableViewDelegate, UITableViewDataSource{
             let searchedStore = searchedStores[indexPath.row]
             cell.set(searchedStore)
         }else{
-           let store = storesArray[indexPath.row]
+            let store = storesArray[indexPath.row]
             cell.set(store)
         }
         return cell
@@ -120,12 +118,12 @@ extension ExploreViewController: UISearchBarDelegate{
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        let storeNames = storesArray.map{$0.storeName}
+        let storeNames = storesArray.map{$0.storeName.name}
         searchedStoresNames = storeNames.filter({$0.prefix(searchText.count) == searchText})
         searchedStores.removeAll()
         
         for i in storesArray{
-            if searchedStoresNames.contains(i.storeName){
+            if searchedStoresNames.contains(i.storeName.name){
                 searchedStores.append(i)
             }
         }
