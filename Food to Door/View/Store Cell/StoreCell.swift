@@ -111,9 +111,6 @@ class StoreCell: UITableViewCell {
                     self.deliveryTypeLabel.text = "$\(deliveryFee)"
                 }
             }
-            
-            
-            
         }
     }
 }

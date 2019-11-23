@@ -10,6 +10,8 @@ import UIKit
 
 class FavoriteButton: UIButton{
     
+    var dataManager = DataManager()
+    
     override init(frame: CGRect){
         super.init(frame: frame)
     }
@@ -34,7 +36,8 @@ class FavoriteButton: UIButton{
     func configureFavoritesButton(tabBarController: UITabBarController, store: Store){
         if let navController = tabBarController.viewControllers?[1] as? UINavigationController{
             if let favoriteVC = navController.viewControllers.first as? FavoritesViewController{
-                let storeNames = favoriteVC.favoriteStores.map{$0.storeName.name}
+                let storeNames = favoriteVC.dataManager.stores.map{$0.storeName.name}
+                
                 if storeNames.contains(store.storeName.name){
                     DispatchQueue.main.async {
                         self.favoritedUISetup()

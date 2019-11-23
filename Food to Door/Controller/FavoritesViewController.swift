@@ -11,30 +11,31 @@ import UIKit
 class FavoritesViewController: UIViewController {
     
     @IBOutlet var tableView: UITableView!
-    var favoriteStores = [Store]()
     private var searchBar = UISearchBar()
-    private var searchedStoresNames = [String]()
-    private var searchedStores = [Store]()
-    private var isSearching = false
+    
+    var dataManager = DataManager()
+    lazy var dataSourceProvider = DataSourceProvider(dataManager: dataManager)
+    lazy var searchBarManager = SearchBar(dataManager: dataManager)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.delegate = self
-        tableView.dataSource = self
+        tableView.dataSource = dataSourceProvider
+        tableView.delegate = dataSourceProvider
+        dataSourceProvider.delegate = self
+        searchBarManager.delegate = self
         
-        setupTableView()
         setupNavBar()
-        loadFavorites()
+        dataManager.loadFavorites()
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        tableView.reloadData()
-    }
-    
-    private func setupTableView(){
-        tableView.register(StoreCell.self, forCellReuseIdentifier: Cells.storeCell)
+        super.viewWillAppear(true)
+        dataManager.loadFavorites()
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
     
     private func setupNavBar(){
@@ -44,32 +45,6 @@ class FavoritesViewController: UIViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "nav-address"), style: .plain, target: self, action: nil)
     }
     
-    private func saveFavorites(_ storesArray : [Store]){
-        let defaults = UserDefaults.standard
-        let jsonEncoder = JSONEncoder()
-        if let savedData = try? jsonEncoder.encode(storesArray){
-            defaults.set(savedData, forKey: "favoriteStoresArray")
-        }else{
-            DispatchQueue.main.async {
-                Alert.showUnableToSaveToFavoritesAlert(on: self)
-            }
-        }
-    }
-    
-    private func loadFavorites(){
-        let defaults = UserDefaults.standard
-        if let favoriteStores = defaults.object(forKey: "favoriteStoresArray") as? Data{
-            let jsonDecoder = JSONDecoder()
-            do{
-                self.favoriteStores = try jsonDecoder.decode([Store].self, from: favoriteStores)
-            }catch{
-                DispatchQueue.main.async {
-                    Alert.showUnableToLoadFavoritesAlert(on: self)
-                }
-            }
-        }
-    }
-    
     @objc func searchForStores(){
         navigationItem.rightBarButtonItem = nil
         navigationItem.leftBarButtonItem = nil
@@ -77,83 +52,38 @@ class FavoritesViewController: UIViewController {
         searchBar.placeholder = " Search..."
         searchBar.sizeToFit()
         searchBar.isTranslucent = false
-        searchBar.delegate = self
+        searchBar.delegate = searchBarManager
         searchBar.showsCancelButton = true
         searchBar.returnKeyType = UIReturnKeyType.done
         navigationItem.titleView = searchBar
     }
 }
 
-//MARK: - UITableViewDelegate, UITableViewDataSource
-extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource{
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if isSearching{
-            return searchedStores.count
-        }else{
-            return favoriteStores.count
-        }
-    }
+//MARK: - DataSourceProviderDelegate, SearchBarDelegate
+extension FavoritesViewController: DataSourceProviderDelegate, SearchBarDelegate{
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: Cells.storeCell) as? StoreCell else {fatalError()}
-        if isSearching{
-            let searchedStore = searchedStores[indexPath.row]
-            cell.set(searchedStore)
-        }else{
-            let store = favoriteStores[indexPath.row]
-            cell.set(store)
-        }
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete{
-            self.favoriteStores.remove(at: indexPath.row)
-            saveFavorites(favoriteStores)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func selectedCell(row: Int) {
         let storyboard = UIStoryboard(name: "Explore", bundle: nil)
         guard let storeVC = storyboard.instantiateViewController(identifier: "StoreVC") as? StoreViewController else {return}
-        if isSearching{
-            storeVC.selectedStore = searchedStores[indexPath.row]
+        
+        if dataManager.isSearching{
+            storeVC.selectedStore = dataManager.searchedStores[row]
         }else{
-            storeVC.selectedStore = favoriteStores[indexPath.row]
+            storeVC.selectedStore = dataManager.stores[row]
         }
         navigationController?.pushViewController(storeVC, animated: true)
-        tableView.deselectRow(at: indexPath, animated: true)
     }
     
-}
-
-//MARK: - UISearchBarDelegate
-extension FavoritesViewController: UISearchBarDelegate{
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+    func searchCancelButtonClicked() {
         navigationItem.titleView = nil
         setupNavBar()
-        isSearching = false
+        dataManager.isSearching = false
         searchBar.searchTextField.text = ""
         tableView.reloadData()
     }
     
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        let storeNames = favoriteStores.map{$0.storeName.name}
-        searchedStoresNames = storeNames.filter({$0.prefix(searchText.count) == searchText})
-        searchedStores.removeAll()
-        
-        for i in favoriteStores{
-            if searchedStoresNames.contains(i.storeName.name){
-                searchedStores.append(i)
-            }
-        }
-        isSearching = true
+    func setSearchedStores() {
         tableView.reloadData()
     }
     
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.searchTextField.text = ""
-        searchBar.searchTextField.endEditing(true)
-    }
 }
