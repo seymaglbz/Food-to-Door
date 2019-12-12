@@ -8,31 +8,30 @@
 
 import Foundation
 
-struct Store: Codable{
-    
-    var storeImage: String
-    var storeType: String
+struct Store: Codable {
+    var image: String
+    var type: String
     var deliveryFee: Int?
     var deliveryTime: Int?
-    var storeID: Int
-    var storeName: Business!
+    var id: Int
+    var business: Business!
     
-    init(data: [String: Any]){
-        storeImage = data["cover_img_url"] as! String
-        storeType = data["description"] as! String
+    init(data: [String: Any]) {
+        image = data["cover_img_url"] as! String
+        type = data["description"] as! String
         deliveryFee = data["delivery_fee"] as? Int ?? 0
         deliveryTime = data["asap_time"] as? Int ?? 0
-        storeID = data["id"] as! Int
-        storeName = parseStoreName(data: data)
+        id = data["id"] as! Int
+        business = parseStoreName(data: data)
     }
     
-    func parseStoreName(data:[String: Any]) -> Business{
+    func parseStoreName(data:[String: Any]) -> Business {
         let storeName = data["business"] as! [String: Any]
         return Business(data: storeName)
     }
 }
 
-struct Business: Codable{
+struct Business: Codable {
     let name: String
     
     init(data: [String: Any]){

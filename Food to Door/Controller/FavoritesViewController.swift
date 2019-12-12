@@ -9,10 +9,9 @@
 import UIKit
 
 class FavoritesViewController: UIViewController {
-    
     @IBOutlet var tableView: UITableView!
-    private var searchBar = UISearchBar()
     
+    private var searchBar = UISearchBar()
     var dataManager = DataManager()
     lazy var dataSourceProvider = DataSourceProvider(dataManager: dataManager)
     lazy var searchBarManager = SearchBar(dataManager: dataManager)
@@ -38,14 +37,14 @@ class FavoritesViewController: UIViewController {
         }
     }
     
-    private func setupNavBar(){
+    private func setupNavBar() {
         navigationItem.title = "Food to Door"
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "nav-search"), style: .plain, target: self, action: #selector(searchForStores))
         self.navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "nav-address"), style: .plain, target: self, action: nil)
     }
     
-    @objc func searchForStores(){
+    @objc func searchForStores() {
         navigationItem.rightBarButtonItem = nil
         navigationItem.leftBarButtonItem = nil
         searchBar.searchBarStyle = UISearchBar.Style.prominent
@@ -60,17 +59,12 @@ class FavoritesViewController: UIViewController {
 }
 
 //MARK: - DataSourceProviderDelegate, SearchBarDelegate
-extension FavoritesViewController: DataSourceProviderDelegate, SearchBarDelegate{
-    
+extension FavoritesViewController: DataSourceProviderDelegate, SearchBarDelegate {
     func selectedCell(row: Int) {
         let storyboard = UIStoryboard(name: "Explore", bundle: nil)
         guard let storeVC = storyboard.instantiateViewController(identifier: "StoreVC") as? StoreViewController else {return}
         
-        if dataManager.isSearching{
-            storeVC.selectedStore = dataManager.searchedStores[row]
-        }else{
-            storeVC.selectedStore = dataManager.stores[row]
-        }
+        storeVC.selectedStore = dataManager.isSearching ? dataManager.searchedStores[row] : dataManager.stores[row]
         navigationController?.pushViewController(storeVC, animated: true)
     }
     
@@ -84,6 +78,5 @@ extension FavoritesViewController: DataSourceProviderDelegate, SearchBarDelegate
     
     func setSearchedStores() {
         tableView.reloadData()
-    }
-    
+    }    
 }

@@ -10,52 +10,40 @@ import Foundation
 import UIKit
 import CoreLocation
 
-class DataManager{
-    
-    var stores = [Store]()
-    var searchedStores = [Store]()
+class DataManager {    
+    var stores: [Store] = []
+    var searchedStores: [Store] = []
     var isSearching = false
-    var searchedStoresNames = [String]()
+    var searchedStoresNames: [String] = []
     let defaults = UserDefaults.standard
+    var storesCount: Int {
+        return isSearching ? searchedStores.count : stores.count
+    }
+    let favoriteStores = "favoriteStoresArray"
     
-    var storesCount: Int{
-        if isSearching{
-            return searchedStores.count
-        }else{
-            return stores.count
-        }
+    func store(at index: Int) -> Store {
+        return isSearching ? searchedStores[index] : stores[index]
     }
     
-    func store(at index: Int) -> Store{
-        if isSearching{
-            return searchedStores[index]
-        }else{
-            return stores[index]
-        }
-    }
-    
-    func deleteStore(at index: Int){
+    func deleteStore(at index: Int) {
         stores.remove(at: index)
     }
     
-    func saveFavorites(_ storesArray : [Store]){
+    func saveFavorites(_ storesArray : [Store]) {
         let jsonEncoder = JSONEncoder()
-        if let savedData = try? jsonEncoder.encode(storesArray){
-            defaults.set(savedData, forKey: "favoriteStoresArray")
-        }
+        guard let savedData = try? jsonEncoder.encode(storesArray) else {return}
+        defaults.set(savedData, forKey: favoriteStores)
     }
     
-    func loadFavorites(){
+    func loadFavorites() {
         DispatchQueue.global(qos: .background).async {
-            if let favoriteStores = self.defaults.object(forKey: "favoriteStoresArray") as? Data{
-                let jsonDecoder = JSONDecoder()
-                do{
-                    self.stores = try jsonDecoder.decode([Store].self, from: favoriteStores)
-                }catch{
-                  print("Couldn't load favorite stores")
-                }
+            guard let favoriteStores = self.defaults.object(forKey: self.favoriteStores) as? Data else {return}
+            let jsonDecoder = JSONDecoder()
+            do{
+                self.stores = try jsonDecoder.decode([Store].self, from: favoriteStores)
+            }catch{
+                print("Couldn't load favorite stores")
             }
         }
     }
-    
 }

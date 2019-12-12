@@ -8,12 +8,11 @@
 
 import UIKit
 
-struct Cells{
+struct Cells {
     static let storeCell = "StoreCellIdentifier"
 }
 
 class StoreCell: UITableViewCell {
-    
     private var storeImage = UIImageView()
     private var storeNameLabel = UILabel()
     private var storeTypeLabel = UILabel()
@@ -37,17 +36,16 @@ class StoreCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func configureLabels(){
+    private func configureLabels() {
         storeNameLabel.font = .boldSystemFont(ofSize: 17)
         storeTypeLabel.font = .systemFont(ofSize: 16)
         deliveryTypeLabel.font = .systemFont(ofSize: 16)
         storeTypeLabel.textColor = .darkGray
         deliveryTypeLabel.textColor = .darkGray
         deliveryTimeLabel.textColor = .darkGray
-        
     }
     
-    private func setStoreImageConstraints(){
+    private func setStoreImageConstraints() {
         storeImage.translatesAutoresizingMaskIntoConstraints = false
         storeImage.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         storeImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
@@ -55,7 +53,7 @@ class StoreCell: UITableViewCell {
         storeImage.widthAnchor.constraint(equalToConstant: 140).isActive = true
     }
     
-    private func setLabelConstraints(){
+    private func setLabelConstraints() {
         storeNameLabel.translatesAutoresizingMaskIntoConstraints = false
         storeTypeLabel.translatesAutoresizingMaskIntoConstraints = false
         deliveryTypeLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -82,35 +80,21 @@ class StoreCell: UITableViewCell {
         deliveryTimeLabel.heightAnchor.constraint(equalToConstant: 15).isActive = true
     }
     
-    func set(_ store: Store){
-        
-        let urlString = store.storeImage
-        if let url = URL(string: urlString){
-            if let data = try? Data(contentsOf: url){
-                if let image = UIImage(data: data){
-                    DispatchQueue.main.async {
-                        self.storeImage.image = image
-                        self.storeImage.contentMode = .scaleAspectFit
-                    }
-                }
-            }
-        }
+    func set(_ store: Store) {        
+        let urlString = store.image
+        guard let url = URL(string: urlString) else {return}
+        guard let data = try? Data(contentsOf: url) else {return}
+        guard let image = UIImage(data: data) else {return}
+        guard let deliveryTime = store.deliveryTime else {return}
+        guard let deliveryFee = store.deliveryFee else {return}
         
         DispatchQueue.main.async {
-            self.storeNameLabel.text = store.storeName.name
-            self.storeTypeLabel.text = store.storeType
-            if let deliveryTime = store.deliveryTime, let deliveryFee = store.deliveryFee{
-                if deliveryTime == 0{
-                    self.deliveryTimeLabel.text = "-"
-                }else{
-                    self.deliveryTimeLabel.text = "\(deliveryTime) min"
-                }
-                if deliveryFee == 0{
-                    self.deliveryTypeLabel.text = "Free Delivery"
-                }else{
-                    self.deliveryTypeLabel.text = "$\(deliveryFee)"
-                }
-            }
+            self.storeImage.image = image
+            self.storeImage.contentMode = .scaleAspectFit
+            self.storeNameLabel.text = store.business.name
+            self.storeTypeLabel.text = store.type
+            self.deliveryTimeLabel.text = deliveryTime == 0 ? "-" : "\(deliveryTime) min"
+            self.deliveryTypeLabel.text = deliveryFee == 0 ? "Free Delivery" : "$\(deliveryFee)"
         }
     }
 }

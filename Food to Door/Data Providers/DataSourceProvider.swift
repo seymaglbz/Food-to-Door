@@ -8,11 +8,11 @@
 
 import UIKit
 
-protocol DataSourceProviderDelegate: class{
+protocol DataSourceProviderDelegate: class {
     func selectedCell(row: Int)
 }
 
-class DataSourceProvider: NSObject, UITableViewDataSource, UITableViewDelegate{
+class DataSourceProvider: NSObject, UITableViewDataSource, UITableViewDelegate {
     
     private let dataManager: DataManager
     var delegate: DataSourceProviderDelegate?

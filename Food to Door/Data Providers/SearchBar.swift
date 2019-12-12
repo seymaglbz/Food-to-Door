@@ -8,13 +8,12 @@
 
 import UIKit
 
-protocol  SearchBarDelegate {
+protocol SearchBarDelegate {
     func searchCancelButtonClicked()
     func setSearchedStores()
 }
 
-class SearchBar: NSObject, UISearchBarDelegate{
-    
+class SearchBar: NSObject, UISearchBarDelegate {
     var delegate: SearchBarDelegate?
     private let dataManager: DataManager
     
@@ -29,14 +28,12 @@ class SearchBar: NSObject, UISearchBarDelegate{
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        let storeNames = dataManager.stores.map{$0.storeName.name}
+        let storeNames = dataManager.stores.map{$0.business.name}
         dataManager.searchedStoresNames = storeNames.filter({$0.prefix(searchText.count) == searchText})
         dataManager.searchedStores.removeAll()
         
-        for i in dataManager.stores{
-            if dataManager.searchedStoresNames.contains(i.storeName.name){
-                dataManager.searchedStores.append(i)
-            }
+        for store in dataManager.stores where dataManager.searchedStoresNames.contains(store.business.name) {
+            dataManager.searchedStores.append(store)
         }
         
         dataManager.isSearching = true
@@ -47,6 +44,5 @@ class SearchBar: NSObject, UISearchBarDelegate{
         searchBar.searchTextField.text = ""
         searchBar.searchTextField.endEditing(true)
     }
-
 }
 

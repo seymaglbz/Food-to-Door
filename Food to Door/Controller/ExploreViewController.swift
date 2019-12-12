@@ -10,11 +10,10 @@ import UIKit
 import CoreLocation
 
 class ExploreViewController: UIViewController {
-    
     @IBOutlet var tableView: UITableView!
+    
     var userLocation: CLLocation?
     private var searchBar = UISearchBar()
-    
     private var dataManager = DataManager()
     lazy var dataSourceProvider = DataSourceProvider(dataManager: dataManager)
     lazy var searchBarManager = SearchBar(dataManager: dataManager)
@@ -32,29 +31,28 @@ class ExploreViewController: UIViewController {
         setupNavBar()
     }
     
-    func loadStores(){
-        if let latitude = userLocation?.coordinate.latitude, let longitude = userLocation?.coordinate.longitude{
-            NetworkManager.shared.fetchStores(latitude: latitude, longitude: longitude){ stores in
-                guard let stores = stores else {
-                    Alert.showUnableToRetrieveStoresAlert(on: self)
-                    return
-                }
-                self.dataManager.stores = stores
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
+    func loadStores() {
+        guard let latitude = userLocation?.coordinate.latitude, let longitude = userLocation?.coordinate.longitude else {return}
+        NetworkManager.shared.fetchStores(latitude: latitude, longitude: longitude){ stores in
+            guard let stores = stores else {
+                Alert.showUnableToRetrieveStoresAlert(on: self)
+                return
+            }
+            self.dataManager.stores = stores
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
             }
         }
     }
     
-    private func setupNavBar(){
+    private func setupNavBar() {
         navigationItem.title = "Food to Door"
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "nav-search"), style: .plain, target: self, action: #selector(searchForStores))
-        self.navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
+        navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "nav-address"), style: .plain, target: self, action: nil)
     }
     
-    @objc func searchForStores(){
+    @objc func searchForStores() {
         navigationItem.rightBarButtonItem = nil
         navigationItem.leftBarButtonItem = nil
         searchBar.searchBarStyle = UISearchBar.Style.prominent
@@ -69,27 +67,21 @@ class ExploreViewController: UIViewController {
 }
 
 //MARK: - UITabBarControllerDelegate
-extension ExploreViewController: UITabBarControllerDelegate{
-    
+extension ExploreViewController: UITabBarControllerDelegate {
     //When explore button on the tabbar tapped, always goes back to ExploreViewController
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        let navController = tabBarController.viewControllers?[0] as! UINavigationController
+        let navController = tabBarController.viewControllers?.first as! UINavigationController
         navController.popToRootViewController(animated: true)
-        
     }
 }
 
 //MARK: - DataSourceProviderDelegate, SearchBarDelegate
-extension ExploreViewController: DataSourceProviderDelegate, SearchBarDelegate{
+extension ExploreViewController: DataSourceProviderDelegate, SearchBarDelegate {
     
-    func selectedCell(row: Int) {
-        
+    func selectedCell(row: Int) {        
         guard let storeVC = storyboard?.instantiateViewController(identifier: "StoreVC") as? StoreViewController else {return}
-        if dataManager.isSearching{
-            storeVC.selectedStore = dataManager.searchedStores[row]
-        }else{
-            storeVC.selectedStore = dataManager.stores[row]
-        }
+      
+        storeVC.selectedStore = dataManager.isSearching ? dataManager.searchedStores[row] : dataManager.stores[row]
         navigationController?.pushViewController(storeVC, animated: true)
     }
     

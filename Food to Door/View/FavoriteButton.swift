@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FavoriteButton: UIButton{
+class FavoriteButton: UIButton {
     
     var dataManager = DataManager()
     
@@ -20,36 +20,27 @@ class FavoriteButton: UIButton{
         super.init(coder: coder)
     }
     
-    func favoritedUISetup(){
+    func favoritedUISetup() {
         backgroundColor = .red
         tintColor = .white
         setTitle(" Favorited", for: .normal)
         setImage(UIImage(named: "star-white"), for: .normal)
     }
     
-    func unfavoritedUISetup(){
+    func unfavoritedUISetup() {
         layer.cornerRadius = 1
         layer.borderWidth = 1
         layer.borderColor = UIColor.red.cgColor
     }
     
-    func configureFavoritesButton(tabBarController: UITabBarController, store: Store){
-        if let navController = tabBarController.viewControllers?[1] as? UINavigationController{
-            if let favoriteVC = navController.viewControllers.first as? FavoritesViewController{
-                let storeNames = favoriteVC.dataManager.stores.map{$0.storeName.name}
-                
-                if storeNames.contains(store.storeName.name){
-                    DispatchQueue.main.async {
-                        self.favoritedUISetup()
-                    }
-                    return
-                }else{
-                    DispatchQueue.main.async {
-                        self.unfavoritedUISetup()
-                    }
-                }
-            }
+    func configure(for tabBarController: UITabBarController, store: Store) {
+        let secondVC = 1
+        guard let navController = tabBarController.viewControllers?[secondVC] as? UINavigationController else {return}
+        guard let favoriteVC = navController.viewControllers.first as? FavoritesViewController else {return}
+        let storeNames = favoriteVC.dataManager.stores.map{$0.business.name}
+        
+        DispatchQueue.main.async {
+            storeNames.contains(store.business.name) ?  self.favoritedUISetup() : self.unfavoritedUISetup()
         }
-    }
-    
+    }    
 }

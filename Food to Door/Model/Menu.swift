@@ -8,14 +8,14 @@
 
 import Foundation
 
-struct Menu: Codable{
-    var menuCategories: [Category]!
+struct Menu: Codable {
+    var categories: [Category]!
     
-    init(data: [String:Any]){
-        menuCategories = parseMenuCategories(data: data)
+    init(data: [String:Any]) {
+        categories = parseMenuCategories(data: data)
     }
     
-    func parseMenuCategories(data:[String:Any]) -> [Category]{
+    func parseMenuCategories(data:[String:Any]) -> [Category] {
         let menuCategories = data["menu_categories"] as! [[String:Any]]        
         var categoryArray = [Category]()
         for i in 0..<menuCategories.count{
@@ -26,7 +26,7 @@ struct Menu: Codable{
     }
 }
 
-struct Category: Codable{
+struct Category: Codable {
     let title: String
     
     init(data:[String:Any]){
