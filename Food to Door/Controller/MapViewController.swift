@@ -10,24 +10,56 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class ViewController: UIViewController, MKMapViewDelegate {
-    @IBOutlet var mapView: MKMapView!
-    @IBOutlet var addressLabel: UILabel!
-    @IBOutlet var confirmAddressButton: UIButton!
-    
+class MapViewController: UIViewController, MKMapViewDelegate {
     private let locationManager = CLLocationManager()
     private let regionInMeters: Double = 200
     private var previousLocation: CLLocation?
     private var placemark: CLPlacemark?
     private var geoCoder: CLGeocoder!
+    var sharedMapView = SharedMapView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Choose an Address"
-        navigationController?.navigationBar.tintColor = .red      
-        
+        setupUI()
         checkLocationServices()
+    }
+    
+    func setupUI() {
+        view = sharedMapView
+        sharedMapView.mapView.delegate = self
+        sharedMapView.confirmAddressButton.addTarget(self, action: #selector(goToStores), for: .touchUpInside)
+        
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(addPin(_:)))
+        sharedMapView.mapView.addGestureRecognizer(longPress)
+    }
+    
+    @objc func addPin(_ sender: UILongPressGestureRecognizer) {
+        let location = sender.location(in: sharedMapView.mapView)
+        let locationCoordinate = sharedMapView.mapView.convert(location, toCoordinateFrom: sharedMapView.mapView)
+        
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = locationCoordinate
+        
+        guard let placemark = placemark else {return}
+        annotation.title = placemark.subThoroughfare
+        annotation.subtitle = placemark.thoroughfare
+        previousLocation = CLLocation(latitude: locationCoordinate.latitude, longitude: locationCoordinate.longitude)
+        
+        sharedMapView.mapView.removeAnnotations(sharedMapView.mapView.annotations)
+        sharedMapView.mapView.addAnnotation(annotation)
+        
+        guard let previousLocation = previousLocation else {return}
+        reverseGeoCode(from: previousLocation)
+    }
+    
+    @objc func goToStores() {
+        let tabBarController = TabBarController()
+        guard let navigationController = tabBarController.viewControllers?.first as? UINavigationController else {return}
+        guard let exploreVC = navigationController.viewControllers.first as? ExploreViewController else {return}
+        exploreVC.userLocation = previousLocation
+        
+        present(tabBarController, animated: true, completion: nil)
     }
     
     private func checkLocationServices() {
@@ -65,10 +97,10 @@ class ViewController: UIViewController, MKMapViewDelegate {
     }
     
     private func startTrackingUserLocation() {
-        mapView.showsUserLocation = true
+        sharedMapView.mapView.showsUserLocation = true
         centerViewOnUserLocation()
-        previousLocation = getCenterLocation(for: mapView)
-        guard  let previousLocation = previousLocation else {return}
+        previousLocation = getCenterLocation(for: sharedMapView.mapView)
+        guard let previousLocation = previousLocation else {return}
         
         reverseGeoCode(from: previousLocation)
     }
@@ -83,33 +115,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
     private func centerViewOnUserLocation() {
         guard let location = locationManager.location?.coordinate else {return}
         let region = MKCoordinateRegion.init(center: location, latitudinalMeters: regionInMeters, longitudinalMeters: regionInMeters)
-        mapView.setRegion(region, animated: true)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let tabBarController = segue.destination as! UITabBarController
-        guard let navController = tabBarController.viewControllers?.first as? UINavigationController else {return}
-        guard let exploreVC = navController.viewControllers.first as? ExploreViewController else {return}
-        exploreVC.userLocation = previousLocation
-    }
-    
-    @IBAction func addPin(_ sender: UILongPressGestureRecognizer) {
-        let location = sender.location(in: self.mapView)
-        let locationCoordinate = self.mapView.convert(location, toCoordinateFrom: self.mapView)
-        
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = locationCoordinate
-        
-        guard let placemark = placemark else {return}
-        annotation.title = placemark.subThoroughfare
-        annotation.subtitle = placemark.thoroughfare
-        previousLocation = CLLocation(latitude: locationCoordinate.latitude, longitude: locationCoordinate.longitude)
-        
-        self.mapView.removeAnnotations(mapView.annotations)
-        self.mapView.addAnnotation(annotation)
-        
-        guard let previousLocation = previousLocation else {return}
-        reverseGeoCode(from: previousLocation)
+        sharedMapView.mapView.setRegion(region, animated: true)
     }
     
     private func reverseGeoCode(from location: CLLocation) {
@@ -131,16 +137,17 @@ class ViewController: UIViewController, MKMapViewDelegate {
             let streetName = placemark.thoroughfare ?? ""
             
             DispatchQueue.main.async {
-                self.addressLabel.text = "\(streetNumber) \(streetName)"
+                self.sharedMapView.addressLabel.text = "\(streetNumber) \(streetName)"
             }
         }
     }
 }
 
-extension ViewController: CLLocationManagerDelegate {
+//MARK: - CLLocationManagerDelegate
+extension MapViewController: CLLocationManagerDelegate {
+    
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         checkLocationAuthorization()
-        
     }
 }
 

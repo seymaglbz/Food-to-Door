@@ -12,7 +12,7 @@ class FavoriteButton: UIButton {
     
     var dataManager = DataManager()
     
-    override init(frame: CGRect){
+    override init(frame: CGRect) {
         super.init(frame: frame)
     }
     
@@ -22,12 +22,15 @@ class FavoriteButton: UIButton {
     
     func favoritedUISetup() {
         backgroundColor = .red
-        tintColor = .white
         setTitle(" Favorited", for: .normal)
+        setTitleColor(.white, for: .normal)
         setImage(UIImage(named: "star-white"), for: .normal)
     }
     
     func unfavoritedUISetup() {
+        setTitle("Add to Favorites", for: .normal)
+        setTitleColor(.red, for: .normal)
+        titleLabel?.textAlignment = .center
         layer.cornerRadius = 1
         layer.borderWidth = 1
         layer.borderColor = UIColor.red.cgColor
