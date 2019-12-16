@@ -14,7 +14,6 @@
 		C71736C72338A2A80067A5DD /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71736C62338A2A80067A5DD /* MapViewController.swift */; };
 		C71736CC2338A2AA0067A5DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C71736CB2338A2AA0067A5DD /* Assets.xcassets */; };
 		C71736CF2338A2AA0067A5DD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C71736CD2338A2AA0067A5DD /* LaunchScreen.storyboard */; };
-		C71736D72338A6740067A5DD /* ExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71736D62338A6740067A5DD /* ExploreViewController.swift */; };
 		C753659123A51BE400A7F160 /* SharedStoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C753659023A51BE400A7F160 /* SharedStoreView.swift */; };
 		C753865D2384582600A74C1A /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C753865C2384582600A74C1A /* DataManager.swift */; };
 		C753865F2384585700A74C1A /* DataSourceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C753865E2384585700A74C1A /* DataSourceProvider.swift */; };
@@ -26,8 +25,9 @@
 		C79147472354CAF800524151 /* StoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79147452354CAF800524151 /* StoreCell.swift */; };
 		C79ECCBE2382B96D00E4EB01 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79ECCBD2382B96D00E4EB01 /* Menu.swift */; };
 		C7A3CC62235AE05A009E359D /* StoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A3CC61235AE05A009E359D /* StoreViewController.swift */; };
+		C7E88D1723A767640016C5A1 /* StoreListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E88D1623A767640016C5A1 /* StoreListViewController.swift */; };
+		C7E88D1923A7693A0016C5A1 /* ExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E88D1823A7693A0016C5A1 /* ExploreViewController.swift */; };
 		C7E9FF9B237EA20000F23786 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E9FF9A237EA1FF00F23786 /* NetworkManager.swift */; };
-		C7EF198823A236FE00C01C34 /* StoreListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EF198723A236FE00C01C34 /* StoreListViewController.swift */; };
 		C7EF3DEF23A616D700C18139 /* SharedMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EF3DEE23A616D700C18139 /* SharedMapView.swift */; };
 /* End PBXBuildFile section */
 
@@ -41,7 +41,6 @@
 		C71736CB2338A2AA0067A5DD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C71736CE2338A2AA0067A5DD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C71736D02338A2AA0067A5DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C71736D62338A6740067A5DD /* ExploreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreViewController.swift; sourceTree = "<group>"; };
 		C753659023A51BE400A7F160 /* SharedStoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStoreView.swift; sourceTree = "<group>"; };
 		C753865C2384582600A74C1A /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		C753865E2384585700A74C1A /* DataSourceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSourceProvider.swift; sourceTree = "<group>"; };
@@ -53,8 +52,9 @@
 		C79147452354CAF800524151 /* StoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreCell.swift; sourceTree = "<group>"; };
 		C79ECCBD2382B96D00E4EB01 /* Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
 		C7A3CC61235AE05A009E359D /* StoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreViewController.swift; sourceTree = "<group>"; };
+		C7E88D1623A767640016C5A1 /* StoreListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListViewController.swift; sourceTree = "<group>"; };
+		C7E88D1823A7693A0016C5A1 /* ExploreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreViewController.swift; sourceTree = "<group>"; };
 		C7E9FF9A237EA1FF00F23786 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
-		C7EF198723A236FE00C01C34 /* StoreListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListViewController.swift; sourceTree = "<group>"; };
 		C7EF3DEE23A616D700C18139 /* SharedMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedMapView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -136,8 +136,8 @@
 			children = (
 				C71736C62338A2A80067A5DD /* MapViewController.swift */,
 				C7670EAE23A3DCFE003B8369 /* TabBarController.swift */,
-				C7EF198723A236FE00C01C34 /* StoreListViewController.swift */,
-				C71736D62338A6740067A5DD /* ExploreViewController.swift */,
+				C7E88D1623A767640016C5A1 /* StoreListViewController.swift */,
+				C7E88D1823A7693A0016C5A1 /* ExploreViewController.swift */,
 				C7914741235452F100524151 /* FavoritesViewController.swift */,
 				C7A3CC61235AE05A009E359D /* StoreViewController.swift */,
 			);
@@ -226,10 +226,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7670EAC23A37D18003B8369 /* UIView+Ext.swift in Sources */,
-				C7EF198823A236FE00C01C34 /* StoreListViewController.swift in Sources */,
 				C7093A8A238192D0003B2A0B /* Store.swift in Sources */,
 				C7670EAF23A3DCFF003B8369 /* TabBarController.swift in Sources */,
-				C71736D72338A6740067A5DD /* ExploreViewController.swift in Sources */,
 				C76724DE2386BCC9004DD0F8 /* SearchBar.swift in Sources */,
 				C7EF3DEF23A616D700C18139 /* SharedMapView.swift in Sources */,
 				C7A3CC62235AE05A009E359D /* StoreViewController.swift in Sources */,
@@ -239,9 +237,11 @@
 				C71736C32338A2A80067A5DD /* AppDelegate.swift in Sources */,
 				C753865F2384585700A74C1A /* DataSourceProvider.swift in Sources */,
 				C79147472354CAF800524151 /* StoreCell.swift in Sources */,
+				C7E88D1923A7693A0016C5A1 /* ExploreViewController.swift in Sources */,
 				C7008101234723E300687A01 /* Alert.swift in Sources */,
 				C79ECCBE2382B96D00E4EB01 /* Menu.swift in Sources */,
 				C7914742235452F100524151 /* FavoritesViewController.swift in Sources */,
+				C7E88D1723A767640016C5A1 /* StoreListViewController.swift in Sources */,
 				C753659123A51BE400A7F160 /* SharedStoreView.swift in Sources */,
 				C753865D2384582600A74C1A /* DataManager.swift in Sources */,
 				C71736C52338A2A80067A5DD /* SceneDelegate.swift in Sources */,

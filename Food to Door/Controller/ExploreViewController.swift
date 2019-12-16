@@ -2,7 +2,7 @@
 //  ExploreViewController.swift
 //  Food to Door
 //
-//  Created by Şeyma Gılbaz on 23.09.2019.
+//  Created by Şeyma Gılbaz on 16.12.2019.
 //  Copyright © 2019 Şeyma Gılbaz. All rights reserved.
 //
 
@@ -10,6 +10,7 @@ import UIKit
 import CoreLocation
 
 class ExploreViewController: StoreListViewController {
+    
     var userLocation: CLLocation?
 
     override func viewDidLoad() {
@@ -30,8 +31,5 @@ class ExploreViewController: StoreListViewController {
                 self.tableView.reloadData()
             }
         }
-    }    
+    }
 }
-
-
-
